@@ -2,11 +2,13 @@ using UnityEngine;
 
 public class MouseMovement : MonoBehaviour
 {
-    public float speed = 5f;
+    public float dragSpeed = 0.02f;
     public float minXLimit = -5f;
     public float maxXLimit = 5f;
 
     private Vector3 startPosition;
+    private float lastMouseX;
+    private bool isDragging = false;
 
     private void Start()
     {
@@ -15,15 +17,38 @@ public class MouseMovement : MonoBehaviour
 
     private void Update()
     {
-        float mouseX = Input.GetAxis("Mouse X"); // ← сглаженное движение
-        float moveX = mouseX * speed;
+        // Начало драга
+        if (Input.GetMouseButtonDown(0))
+        {
+            isDragging = true;
+            lastMouseX = Input.mousePosition.x;
+        }
 
-        float newX = Mathf.Clamp(
-            transform.position.x + moveX,
-            startPosition.x + minXLimit,
-            startPosition.x + maxXLimit
-        );
+        // Конец драга
+        if (Input.GetMouseButtonUp(0))
+        {
+            isDragging = false;
+        }
 
-        transform.position = new Vector3(newX, transform.position.y, transform.position.z);
+        // Сам drag
+        if (isDragging)
+        {
+            float deltaX = Input.mousePosition.x - lastMouseX;
+            lastMouseX = Input.mousePosition.x;
+
+            float newX = transform.position.x + deltaX * dragSpeed;
+
+            newX = Mathf.Clamp(
+                newX,
+                startPosition.x + minXLimit,
+                startPosition.x + maxXLimit
+            );
+
+            transform.position = new Vector3(
+                newX,
+                transform.position.y,
+                transform.position.z
+            );
+        }
     }
 }

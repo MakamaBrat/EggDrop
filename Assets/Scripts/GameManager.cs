@@ -1,11 +1,12 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     [Header("UI")]
-    public TextMeshProUGUI statusText; // Один TextMeshPro на оба значения
-    public TextMeshProUGUI eggs;
+    public Text statusText; // Один TextMeshPro на оба значения
+    public Text eggs;
     [Header("Game Settings")]
     public int maxLives = 10;          // Максимум жизней
     private int currentLives;          // Текущие жизни
